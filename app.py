@@ -152,7 +152,7 @@ class WhatsAppModernApp(ctk.CTk):
     def __init__(self):
         super().__init__()
         self.title("WhatsApp Bulk Messenger — Modern Edition")
-        self.geometry("730x700")
+        self.geometry("780x730")
         ctk.set_appearance_mode("light")
         ctk.set_default_color_theme("blue")  # base only (required)
 
@@ -190,13 +190,14 @@ class WhatsAppModernApp(ctk.CTk):
             hover_color=PRIMARY_HOVER,
             text_color="white",
             corner_radius=16,
-            width=200
+            width=200,
+            command=self.choose_file
         )
         choose_button.pack(pady=5)
         # choose_button = ctk.CTkButton(file_frame, text="Browse File", command=self.choose_file, width=200)
         # choose_button.pack(pady=5)
-        # self.file_label = ctk.CTkLabel(file_frame, text="No file selected", text_color="black", font=("Poppins", 12))
-        # self.file_label.pack(pady=5)
+        self.file_label = ctk.CTkLabel(file_frame, text="No file selected", text_color="black", font=("Poppins", 12))
+        self.file_label.pack(pady=5)
 
         # Message box
         msg_frame = ctk.CTkFrame(
@@ -300,7 +301,7 @@ class WhatsAppModernApp(ctk.CTk):
         ctk.CTkLabel(log_frame, text="Log Output:", font=("Poppins", 14)).pack(pady=5)
         self.log_window = ctk.CTkTextbox(
         log_frame,
-        height=230,
+        height=400,
         width=700,
         corner_radius=16,
         fg_color="#f9fafb",
@@ -308,8 +309,8 @@ class WhatsAppModernApp(ctk.CTk):
         border_color=GLASS_BORDER,
         border_width=1
     )
-        # self.log_window = ctk.CTkTextbox(log_frame, height=230, width=700)
-        self.log_window.pack(padx=10, pady=10)
+        self.log_window = ctk.CTkTextbox(log_frame, height=400, width=700)
+        self.log_window.pack(padx=10, pady=3)
 
     # ---------------- GUI Methods ----------------
     def choose_file(self):
