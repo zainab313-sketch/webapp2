@@ -18,13 +18,20 @@ import sqlite3
 import datetime
 
 
-# PRIMARY = "#a690b4"
-# PRIMARY_HOVER = "#8f7aa0"
-# BG_MAIN = "#f5f5f8"
-# CARD_BG = "#ffffff"
-# TEXT_MAIN = "#1a1a1a"
-# SUCCESS = "#4CAF50"
-# ERROR = "#E53935"
+# ===== Glass Theme Colors =====
+GLASS_BG = "#96608c"
+GLASS_CARD = "#a690b4"
+GLASS_BORDER = "#4b3d57"
+
+PRIMARY = "#4C5E74"          # WhatsApp green
+PRIMARY_HOVER = "#519be1"
+
+TEXT_MAIN = "#1e1e1e"
+TEXT_MUTED = "#6b7280"
+
+SUCCESS = "#4CAF50"
+ERROR = "#E53935"
+
 
 
 # ---------------- Driver ----------------
@@ -146,57 +153,162 @@ class WhatsAppModernApp(ctk.CTk):
         super().__init__()
         self.title("WhatsApp Bulk Messenger — Modern Edition")
         self.geometry("730x700")
-        ctk.set_appearance_mode("white")
-        ctk.set_default_color_theme("green")
+        ctk.set_appearance_mode("light")
+        ctk.set_default_color_theme("blue")  # base only (required)
+
+        self.configure(fg_color=GLASS_BORDER)
         self.excel_path = ""
 
         # Header
-        header = ctk.CTkLabel(self, text="WhatsApp Bulk Messaging App", font=("Poppins", 28, "bold"))
-        header.pack(pady=10)
+
+        header = ctk.CTkLabel(
+        self,
+        text="WhatsApp Bulk Messaging App",
+        font=("Poppins", 28, "bold"),
+        text_color=TEXT_MAIN
+    )
+        header.pack(pady=12)
+        # header = ctk.CTkLabel(self, text="WhatsApp Bulk Messaging App", font=("Poppins", 28, "bold"))
+        # header.pack(pady=10)
 
         # File select
-        file_frame = ctk.CTkFrame(self, corner_radius=15)
+        file_frame = ctk.CTkFrame(
+        self,
+        fg_color=GLASS_CARD,
+        border_color=GLASS_BORDER,
+        border_width=1,
+        corner_radius=18
+    )
         file_frame.pack(pady=10, padx=20, fill="x")
+        # file_frame = ctk.CTkFrame(self, corner_radius=15)
+        # file_frame.pack(pady=10, padx=20, fill="x")
         ctk.CTkLabel(file_frame, text="Choose Excel File:", font=("Poppins", 14)).pack(pady=5)
-        choose_button = ctk.CTkButton(file_frame, text="Browse File", command=self.choose_file, width=200)
+        choose_button = ctk.CTkButton(
+            file_frame,
+            text="Browse File",
+            fg_color=PRIMARY,
+            hover_color=PRIMARY_HOVER,
+            text_color="white",
+            corner_radius=16,
+            width=200
+        )
         choose_button.pack(pady=5)
-        self.file_label = ctk.CTkLabel(file_frame, text="No file selected", text_color="black", font=("Poppins", 12))
-        self.file_label.pack(pady=5)
+        # choose_button = ctk.CTkButton(file_frame, text="Browse File", command=self.choose_file, width=200)
+        # choose_button.pack(pady=5)
+        # self.file_label = ctk.CTkLabel(file_frame, text="No file selected", text_color="black", font=("Poppins", 12))
+        # self.file_label.pack(pady=5)
 
         # Message box
-        msg_frame = ctk.CTkFrame(self, corner_radius=15)
-        msg_frame.pack(pady=8, padx=20, fill="both")
+        msg_frame = ctk.CTkFrame(
+        self,
+        fg_color=GLASS_CARD,
+        border_color=GLASS_BORDER,
+        border_width=1,
+        corner_radius=18
+    )
+        msg_frame.pack(pady=10, padx=20, fill="both")
+        # msg_frame = ctk.CTkFrame(self, corner_radius=15)
+        # msg_frame.pack(pady=8, padx=20, fill="both")
         ctk.CTkLabel(msg_frame, text="Message Template:", font=("Poppins", 14)).pack(pady=5)
-        self.message_box = ctk.CTkTextbox(msg_frame, height=80, width=520, corner_radius=12)
+        self.message_box = ctk.CTkTextbox(
+            msg_frame,
+            height=80,
+            width=300,
+            corner_radius=16,
+            fg_color="#f9fafb",
+            text_color=TEXT_MAIN,
+            border_color=GLASS_BORDER,
+            border_width=1
+        )
+        self.message_box = ctk.CTkTextbox(msg_frame, height=80, width=300, corner_radius=12)
         self.message_box.insert("1.0", "Assalamualaikum {name},\nThis is an automated message.")
         self.message_box.pack(pady=10)
 
         # -------- Status Filter --------
-        filter_frame = ctk.CTkFrame(self, corner_radius=15)
-        filter_frame.pack(pady=5, padx=20, fill="x")
+        filter_frame = ctk.CTkFrame(
+        self,
+        fg_color=GLASS_CARD,
+        border_color=GLASS_BORDER,
+        border_width=1,
+        corner_radius=18
+    )
+        filter_frame.pack(pady=10, padx=20, fill="x")
+        # filter_frame = ctk.CTkFrame(self, corner_radius=15)
+        # filter_frame.pack(pady=5, padx=20, fill="x")
 
         self.only_applied_var = ctk.BooleanVar(value=True)
 
         self.only_applied_checkbox = ctk.CTkCheckBox(
             filter_frame,
             text="Send messages only to contacts with status = 'Applied'",
-            variable=self.only_applied_var
+            variable=self.only_applied_var,
+            text_color=TEXT_MAIN,
+            fg_color=PRIMARY,
+            hover_color=PRIMARY_HOVER
         )
+
+        # self.only_applied_checkbox = ctk.CTkCheckBox(
+        #     filter_frame,
+        #     text="Send messages only to contacts with status = 'Applied'",
+        #     variable=self.only_applied_var
+        # )
         self.only_applied_checkbox.pack(pady=10, padx=10, anchor="w")
 
         # Buttons
-        send_button = ctk.CTkButton(self, text="Start Sending", font=("Poppins", 16, "bold"),
-                                    command=self.start_sending_thread, height=35, corner_radius=10)
-        send_button.pack(pady=8)
-        view_button = ctk.CTkButton(self, text="View Contacts & Status", font=("Poppins", 14, "bold"),
-                                     command=self.show_contacts, height=30, corner_radius=10)
-        view_button.pack(pady=3)
+        send_button = ctk.CTkButton(
+            self,
+            text="Start Sending",
+            fg_color=PRIMARY,
+            hover_color=PRIMARY_HOVER,
+            text_color="white",
+            font=("Poppins", 16, "bold"),
+            height=42,
+            corner_radius=18,
+            command=self.start_sending_thread
+        )
+        send_button.pack(pady=10)
+        # send_button = ctk.CTkButton(self, text="Start Sending", font=("Poppins", 16, "bold"),
+        #                             command=self.start_sending_thread, height=35, corner_radius=10)
+        # send_button.pack(pady=8)
+        view_button = ctk.CTkButton(
+            self,
+            text="View Contacts & Status",
+            fg_color=PRIMARY,
+            hover_color=PRIMARY_HOVER,
+            text_color="white",
+            font=("Poppins", 16, "bold"),
+            height=42,
+            corner_radius=18,
+            command=self.show_contacts
+        )
+        view_button.pack(pady=10)
+        # view_button = ctk.CTkButton(self, text="View Contacts & Status", font=("Poppins", 14, "bold"),
+        #                              command=self.show_contacts, height=30, corner_radius=10)
+        # view_button.pack(pady=3)
 
         # Log area
-        log_frame = ctk.CTkFrame(self, corner_radius=15)
-        log_frame.pack(pady=10, padx=20, fill="both", expand=True)
+        log_frame = ctk.CTkFrame(
+        self,
+        fg_color=GLASS_CARD,
+        border_color=GLASS_BORDER,
+        border_width=1,
+        corner_radius=18
+    )
+        log_frame.pack(pady=10, padx=20, fill="x")
+        # log_frame = ctk.CTkFrame(self, corner_radius=15)
+        # log_frame.pack(pady=10, padx=20, fill="both", expand=True)
         ctk.CTkLabel(log_frame, text="Log Output:", font=("Poppins", 14)).pack(pady=5)
-        self.log_window = ctk.CTkTextbox(log_frame, height=230, width=700)
+        self.log_window = ctk.CTkTextbox(
+        log_frame,
+        height=230,
+        width=700,
+        corner_radius=16,
+        fg_color="#f9fafb",
+        text_color=TEXT_MAIN,
+        border_color=GLASS_BORDER,
+        border_width=1
+    )
+        # self.log_window = ctk.CTkTextbox(log_frame, height=230, width=700)
         self.log_window.pack(padx=10, pady=10)
 
     # ---------------- GUI Methods ----------------

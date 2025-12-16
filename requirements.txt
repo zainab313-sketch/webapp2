@@ -1,4 +1,11 @@
-selenium
+customtkinter
+tk
 pandas
 openpyxl
-customtkinter
+selenium
+webdriver-manager
+urllib3
+
+
+### for dwonloading these write 
+# pip install -r requirements.txt
